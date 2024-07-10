@@ -14,3 +14,11 @@ services:
           target: /Backend
         - action: rebuild
           path: ./Backend/package.json
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: "http://127.0.0.1:5000"
+    env_file:
+      - .env
