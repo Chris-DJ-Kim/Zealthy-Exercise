@@ -6,8 +6,9 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["src/typings/"]
   },
-  "include": ["src/**/*.ts", "custom.d.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

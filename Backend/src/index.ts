@@ -10,6 +10,8 @@ const dbUrl = process.env.DB_URL || "";
 const dbKey = process.env.DB_KEY || "";
 const supabase = createClient(dbUrl, dbKey);
 
+app.use(express.json());
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.header(
