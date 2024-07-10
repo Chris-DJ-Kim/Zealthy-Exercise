@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AxiosResponse } from "axios";
+import validator from "validator";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -20,6 +21,9 @@ const SupportPage = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessageText, setAlertMessageText] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
 
   const buttonText = isLoading ? "Submitting" : "Submit Ticket";
 
@@ -30,6 +34,18 @@ const SupportPage = () => {
       email,
       description,
     };
+    const isEmailValid = !!email && validator.isEmail(email);
+    const hasErrors = !name || !description || !isEmailValid;
+    if (hasErrors) {
+      setNameError(!name);
+      setEmailError(!isEmailValid);
+      setDescriptionError(!description);
+      setShowAlert(true);
+      setSubmitSuccess(false);
+      setAlertMessageText("Invalid fields");
+      setIsLoading(false);
+      return;
+    }
     try {
       const response: AxiosResponse = await api.post<CreateTicketResponse>(
         "/tickets/create-ticket",
@@ -47,6 +63,9 @@ const SupportPage = () => {
       setSubmitSuccess(false);
       setAlertMessageText("Unexpected failure");
     } finally {
+      setNameError(false);
+      setEmailError(false);
+      setDescriptionError(false);
       setShowAlert(true);
       setIsLoading(false);
     }
@@ -54,7 +73,7 @@ const SupportPage = () => {
   return (
     <div>
       <Header isAdmin={false} />
-      <Stack>
+      <Stack minWidth="15vw">
         <h3>Submit ticket here</h3>
         <Stack gap={3}>
           <TextField
@@ -64,14 +83,16 @@ const SupportPage = () => {
             value={name}
             fullWidth
             required
+            error={nameError}
           />
           <TextField
-            type="text"
+            type="email"
             label="Email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             fullWidth
             required
+            error={emailError}
           />
           <TextField
             type="text"
@@ -82,6 +103,7 @@ const SupportPage = () => {
             required
             multiline
             minRows={4}
+            error={descriptionError}
           />
           <Button
             variant="outlined"
