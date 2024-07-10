@@ -18,12 +18,12 @@ const Header = ({ isAdmin }: HeaderPropTypes) => {
     navigate(navigateRoute);
   };
   return (
-    <Box sx={{ flexGrow: 1 }} marginBottom={8}>
+    <Box sx={{ flexGrow: 1 }} marginBottom={8} width="100vw">
       <AppBar position="static" color="inherit">
+        <Box padding={1}>{headerText}</Box>
         <Button color="inherit" onClick={clickHandler}>
           {navigateText}
         </Button>
-        {headerText}
       </AppBar>
     </Box>
   );

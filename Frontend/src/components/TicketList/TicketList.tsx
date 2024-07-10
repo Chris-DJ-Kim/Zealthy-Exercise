@@ -24,7 +24,7 @@ const TicketList = ({ tickets }: TicketListProps) => {
   return (
     <>
       <h4>Ticket List</h4>
-      <Stack>{listTickets()}</Stack>
+      <Stack spacing={3}>{listTickets()}</Stack>
     </>
   );
 };

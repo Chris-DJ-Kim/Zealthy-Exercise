@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Header from "../Header/Header";
 import api from "../../api/api";
 import { AxiosResponse } from "axios";
@@ -15,7 +16,10 @@ type GetAllTicketsResponse = {
 const AdminPage = () => {
   const [allTickets, setAllTickets] = useState<Ticket[]>([]);
   const [getTicketsError, setGetTicketsError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const getTickets = async () => {
+    setIsLoading(true);
+
     try {
       const response: AxiosResponse = await api.get("/tickets/");
       const ticketResponse: GetAllTicketsResponse = response.data;
@@ -29,21 +33,23 @@ const AdminPage = () => {
     } catch (e) {
       setGetTicketsError("Something went wrong while fetching tickets");
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     getTickets();
   }, []);
+  const ticketListText = isLoading ? "Loading tickets" : "No tickets yet";
   const hasTickets = allTickets.length > 0;
   return (
-    <div>
+    <Stack alignItems="center">
       <Header isAdmin={true} />
       <Box marginBottom={4}>
-        {hasTickets ? <TicketList tickets={allTickets} /> : "No tickets yet"}
+        {hasTickets ? <TicketList tickets={allTickets} /> : ticketListText}
       </Box>
       {getTicketsError && (
         <AlertMessage isSuccess={false} message={getTicketsError} />
       )}
-    </div>
+    </Stack>
   );
 };
 

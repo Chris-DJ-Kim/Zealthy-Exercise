@@ -71,9 +71,9 @@ const SupportPage = () => {
     }
   };
   return (
-    <div>
+    <Stack alignItems="center">
       <Header isAdmin={false} />
-      <Stack minWidth="15vw">
+      <Stack width="15vw">
         <h3>Submit ticket here</h3>
         <Stack gap={3}>
           <TextField
@@ -122,7 +122,7 @@ const SupportPage = () => {
           )}
         </Stack>
       </Stack>
-    </div>
+    </Stack>
   );
 };
 
