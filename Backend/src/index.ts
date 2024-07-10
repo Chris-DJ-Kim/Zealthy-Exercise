@@ -1,4 +1,4 @@
-import express, { Express, Request, Response, Router } from "express";
+import express, { Express } from "express";
 import dotenv from "dotenv";
 import ticketRouter from "./routes/Tickets";
 import { createClient } from "@supabase/supabase-js";
@@ -18,6 +18,16 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+  next();
+});
+
+app.use(async (req, res, next) => {
+  const email = process.env.DB_EMAIL || "";
+  const password = process.env.DB_PASSWORD || "";
+  await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
   req.db = supabase;
   next();
 });
