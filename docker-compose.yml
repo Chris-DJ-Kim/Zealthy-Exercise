@@ -1,0 +1,16 @@
+services:
+  backend:
+    build: ./Backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - PORT=5000
+    develop:
+      watch:
+        - action: sync
+          path: ./Backend
+          target: /Backend
+        - action: rebuild
+          path: ./Backend/package.json
