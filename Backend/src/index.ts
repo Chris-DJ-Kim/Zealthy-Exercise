@@ -1,14 +1,12 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import ticketRouter from "./routes/Tickets";
-import { createClient } from "@supabase/supabase-js";
+import errorHandler from "./middleware/errorHandler";
+import dbHandler from "./middleware/dbHandler";
 
 dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 5000;
-const dbUrl = process.env.DB_URL || "";
-const dbKey = process.env.DB_KEY || "";
-const supabase = createClient(dbUrl, dbKey);
 
 app.use(express.json());
 
@@ -21,16 +19,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(async (req, res, next) => {
-  const email = process.env.DB_EMAIL || "";
-  const password = process.env.DB_PASSWORD || "";
-  await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  req.db = supabase;
-  next();
-});
+app.use(errorHandler);
+
+app.use(dbHandler);
 
 app.use("/tickets", ticketRouter);
 
