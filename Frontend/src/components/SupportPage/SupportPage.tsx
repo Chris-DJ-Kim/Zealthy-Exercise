@@ -30,20 +30,26 @@ const SupportPage = () => {
       email,
       description,
     };
-    const response: AxiosResponse = await api.post<CreateTicketResponse>(
-      "/tickets/create-ticket",
-      data
-    );
-    const ticketResponse: CreateTicketResponse = response.data;
-    if (ticketResponse.success) {
-      setSubmitSuccess(true);
-      setAlertMessageText("Ticket submitted successfully");
-    } else {
+    try {
+      const response: AxiosResponse = await api.post<CreateTicketResponse>(
+        "/tickets/create-ticket",
+        data
+      );
+      const ticketResponse: CreateTicketResponse = response.data;
+      if (ticketResponse.success) {
+        setSubmitSuccess(true);
+        setAlertMessageText("Ticket submitted successfully");
+      } else {
+        setSubmitSuccess(false);
+        setAlertMessageText("Ticket submission failed");
+      }
+    } catch (e) {
       setSubmitSuccess(false);
-      setAlertMessageText("Ticket submission failed");
+      setAlertMessageText("Unexpected failure");
+    } finally {
+      setShowAlert(true);
+      setIsLoading(false);
     }
-    setShowAlert(true);
-    setIsLoading(false);
   };
   return (
     <div>
@@ -53,30 +59,30 @@ const SupportPage = () => {
         <Stack gap={3}>
           <TextField
             type="text"
-            label="name"
+            label="Name"
             onChange={(e) => setName(e.target.value)}
             value={name}
             fullWidth
             required
-          ></TextField>
+          />
           <TextField
             type="text"
-            label="email"
+            label="Email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             fullWidth
             required
-          ></TextField>
+          />
           <TextField
             type="text"
-            label="description"
+            label="Description"
             onChange={(e) => setDescription(e.target.value)}
             value={description}
             fullWidth
             required
             multiline
             minRows={4}
-          ></TextField>
+          />
           <Button
             variant="outlined"
             color="primary"
